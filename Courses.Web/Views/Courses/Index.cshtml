@@ -1,0 +1,25 @@
+@model IEnumerable<Courses.Web.Models.Course>
+
+<h1>Kurser</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titel</th>
+            <th>Kategori</th>
+            <th>Lärare</th>
+            <th>Hp</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.Title</td>
+                <td>@course.Category?.Name</td>
+                <td>@course.Teacher?.Name</td>
+                <td>@course.Credits</td>
+            </tr>
+        }
+    </tbody>
+</table>

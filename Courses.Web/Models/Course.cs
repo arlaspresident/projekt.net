@@ -13,7 +13,7 @@ public class Course
     [StringLength(1000)]
     public string? Description { get; set; }
 
-    public int Credits { get; set; }
+    public double Credits { get; set; }
 
     //FK
     public int CategoryId { get; set; }

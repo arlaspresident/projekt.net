@@ -1,5 +1,7 @@
 using Courses.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace Courses.Web.Data;
 
@@ -36,35 +38,57 @@ public static class DbInitializer
             await userManager.AddToRoleAsync(admin, "Admin");
         }
 
-        //seed kategorier
-        if (!context.Categories.Any())
+        //seed kurser från json
+        if (!context.Courses.Any())
         {
-            var web = new Category { Name = "Webbutveckling" };
-            var js = new Category { Name = "JavaScript" };
-            var cs = new Category { Name = "C#" };
-
-            context.Categories.AddRange(web, js, cs);
-            await context.SaveChangesAsync();
-
-            //seed lärare
-            var t1 = new Teacher { Name = "Anna Svensson", Email = "anna@courses.se" };
-            var t2 = new Teacher { Name = "Erik Larsson", Email = "erik@courses.se" };
-            var t3 = new Teacher { Name = "Maria Nilsson", Email = "maria@courses.se" };
-
-            context.Teachers.AddRange(t1, t2, t3);
-            await context.SaveChangesAsync();
-
-            //seed kurser
-            context.Courses.AddRange(
-                new Course { Title = "ASP.NET Core MVC", Credits = 7, CategoryId = web.Id, TeacherId = t1.Id },
-                new Course { Title = "Blazor Basics", Credits = 5, CategoryId = web.Id, TeacherId = t2.Id },
-                new Course { Title = "Modern JavaScript", Credits = 7, CategoryId = js.Id, TeacherId = t3.Id },
-                new Course { Title = "TypeScript Advanced", Credits = 5, CategoryId = js.Id, TeacherId = t2.Id },
-                new Course { Title = "C# Fundamentals", Credits = 7, CategoryId = cs.Id, TeacherId = t1.Id },
-                new Course { Title = "LINQ & EF Core", Credits = 5, CategoryId = cs.Id, TeacherId = t3.Id }
+            var filePath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "Data",
+                "SeedData",
+                "miun_courses.json"
             );
 
-            await context.SaveChangesAsync();
+            if (File.Exists(filePath))
+            {
+                var json = await File.ReadAllTextAsync(filePath);
+                var courses = JsonSerializer.Deserialize<List<MiunCourseDto>>(json);
+
+                if (courses != null)
+                {
+                    foreach (var dto in courses)
+                    {
+                        //skapa kategori om den inte finns
+                        var category = context.Categories
+                            .FirstOrDefault(c => c.Name == dto.subject);
+
+                        if (category == null)
+                        {
+                            category = new Category { Name = dto.subject };
+                            context.Categories.Add(category);
+                            await context.SaveChangesAsync();
+                        }
+
+                        //se till att det finns minst en lärare
+                        var teacher = context.Teachers.FirstOrDefault();
+                        if (teacher == null)
+                        {
+                            teacher = new Teacher { Name = "Ej angiven" };
+                            context.Teachers.Add(teacher);
+                            await context.SaveChangesAsync();
+                        }
+
+                        context.Courses.Add(new Course
+                        {
+                            Title = dto.courseName,
+                            Credits = dto.points,
+                            CategoryId = category.Id,
+                            TeacherId = teacher.Id
+                        });
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
         }
     }
 }
