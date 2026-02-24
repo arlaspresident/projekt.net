@@ -1,8 +1,27 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model IEnumerable<Courses.Web.Models.Course>
 
 <h1>Kurser</h1>
 
-<table class="table">
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-6">
+        <label for="q" class="form-label">Sök</label>
+        <input id="q" name="q" value="@ViewBag.Query" class="form-control" placeholder="Sök på kursnamn..." />
+    </div>
+
+    <div class="col-md-4">
+        <label for="categoryId" class="form-label">Kategori</label>
+        <select id="categoryId" name="categoryId" class="form-select" asp-items="(SelectList)ViewBag.Categories">
+            <option value="">Alla kategorier</option>
+        </select>
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100" type="submit">Filtrera</button>
+    </div>
+</form>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Titel</th>
