@@ -1,0 +1,24 @@
+@model Courses.Web.Models.Category
+
+@{
+    ViewData["Title"] = "Ny kategori";
+}
+
+<h1>Ny kategori</h1>
+
+<form asp-action="Create" method="post" class="col-md-4">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Namn</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spara</button>
+    <a asp-action="Index" class="btn btn-secondary">Avbryt</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

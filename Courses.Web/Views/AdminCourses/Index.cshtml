@@ -1,0 +1,43 @@
+@model List<Courses.Web.Models.Course>
+
+@{
+    ViewData["Title"] = "Hantera kurser";
+}
+
+<h1>Kurser</h1>
+<a asp-action="Create" class="btn btn-success mb-3">+ Ny kurs</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Kurskod</th>
+            <th>Titel</th>
+            <th>Kategori</th>
+            <th>Lärare</th>
+            <th>Hp</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.CourseCode</td>
+                <td>@c.Title</td>
+                <td>@c.Category?.Name</td>
+                <td>@c.Teacher?.Name</td>
+                <td>@c.Credits</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-sm btn-outline-primary">Redigera</a>
+                    <form asp-action="Delete" asp-route-id="@c.Id" method="post" style="display:inline;"
+                          onsubmit="return confirm('Ta bort @c.Title?')">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Ta bort</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Admin" asp-action="Index">Tillbaka till adminpanel</a>

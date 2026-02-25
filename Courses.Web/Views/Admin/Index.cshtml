@@ -1,0 +1,31 @@
+<h1>Adminpanel</h1>
+
+<div class="row mt-4">
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Kurser</h5>
+                <p class="card-text">Skapa, redigera och ta bort kurser.</p>
+                <a asp-controller="AdminCourses" asp-action="Index" class="btn btn-primary">Hantera kurser</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Kategorier</h5>
+                <p class="card-text">Hantera kurskategorier.</p>
+                <a asp-controller="AdminCategories" asp-action="Index" class="btn btn-primary">Hantera kategorier</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Lärare</h5>
+                <p class="card-text">Hantera lärare.</p>
+                <a asp-controller="AdminTeachers" asp-action="Index" class="btn btn-primary">Hantera lärare</a>
+            </div>
+        </div>
+    </div>
+</div>
