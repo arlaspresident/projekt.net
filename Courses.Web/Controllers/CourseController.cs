@@ -28,7 +28,6 @@ public class CoursesController : Controller
         //query
         var query = _context.Courses
             .Include(c => c.Category)
-            .Include(c => c.Teacher)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(q))

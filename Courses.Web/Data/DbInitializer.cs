@@ -52,6 +52,10 @@ public static class DbInitializer
             {
                 var json = await File.ReadAllTextAsync(filePath);
                 var courses = JsonSerializer.Deserialize<List<MiunCourseDto>>(json);
+                courses = courses?
+    .GroupBy(c => c.courseCode)
+    .Select(g => g.First())
+    .ToList();
 
                 if (courses != null)
                 {
@@ -77,13 +81,21 @@ public static class DbInitializer
                             await context.SaveChangesAsync();
                         }
 
-                        context.Courses.Add(new Course
+                        var exists = await context.Courses
+     .AnyAsync(c => c.CourseCode == dto.courseCode);
+
+                        if (!exists)
                         {
-                            Title = dto.courseName,
-                            Credits = dto.points,
-                            CategoryId = category.Id,
-                            TeacherId = teacher.Id
-                        });
+                            context.Courses.Add(new Course
+                            {
+                                CourseCode = dto.courseCode,
+                                Title = dto.courseName,
+                                Credits = dto.points,
+                                CategoryId = category.Id,
+                                TeacherId = teacher.Id,
+                                SyllabusUrl = dto.syllabus
+                            });
+                        }
                     }
 
                     await context.SaveChangesAsync();

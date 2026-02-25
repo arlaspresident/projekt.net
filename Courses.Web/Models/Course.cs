@@ -7,6 +7,12 @@ public class Course
     public int Id { get; set; }
 
     [Required]
+    [StringLength(20)]
+    public string CourseCode { get; set; } = string.Empty;
+
+    [StringLength(500)]
+    public string? SyllabusUrl { get; set; }
+    [Required]
     [StringLength(150)]
     public string Title { get; set; } = string.Empty;
 

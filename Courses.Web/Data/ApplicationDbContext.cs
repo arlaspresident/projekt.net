@@ -38,5 +38,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasOne(e => e.Course)
             .WithMany(c => c.Enrollments)
             .HasForeignKey(e => e.CourseId);
+
+        //en kurskod ska vara unik
+        builder.Entity<Course>()
+            .HasIndex(c => c.CourseCode)
+            .IsUnique();
     }
 }
