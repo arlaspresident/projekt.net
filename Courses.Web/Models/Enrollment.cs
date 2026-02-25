@@ -8,8 +8,12 @@ public class Enrollment
 
     public DateTime EnrolledAt { get; set; } = DateTime.UtcNow;
 
-    //FK
+    //FK till identity anv
+    [Required]
     public string UserId { get; set; } = string.Empty;
+
+    //FK till course
+    [Required]
     public int CourseId { get; set; }
 
     public Course? Course { get; set; }

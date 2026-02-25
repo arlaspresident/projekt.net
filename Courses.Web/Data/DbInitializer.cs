@@ -38,6 +38,23 @@ public static class DbInitializer
             await userManager.AddToRoleAsync(admin, "Admin");
         }
 
+        //skapa student
+        var studentEmail = "student@courses.se";
+        var student = await userManager.FindByEmailAsync(studentEmail);
+
+        if (student == null)
+        {
+            student = new IdentityUser
+            {
+                UserName = studentEmail,
+                Email = studentEmail,
+                EmailConfirmed = true
+            };
+
+            await userManager.CreateAsync(student, "Student123!");
+            await userManager.AddToRoleAsync(student, "Student");
+        }
+
         //seed kurser från json
         if (!context.Courses.Any())
         {
