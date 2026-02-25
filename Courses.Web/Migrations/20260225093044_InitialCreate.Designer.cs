@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Courses.Web.Data.Migrations
+namespace Courses.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260224091138_ChangeCreditsToDouble")]
-    partial class ChangeCreditsToDouble
+    [Migration("20260225093044_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,11 +45,20 @@ namespace Courses.Web.Data.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("CourseCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("Credits")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SyllabusUrl")
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TeacherId")
@@ -63,6 +72,9 @@ namespace Courses.Web.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CourseCode")
+                        .IsUnique();
 
                     b.HasIndex("TeacherId");
 
