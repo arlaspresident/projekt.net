@@ -55,6 +55,27 @@ public static class DbInitializer
             await userManager.AddToRoleAsync(student, "Student");
         }
 
+        //seed lärare
+        if (!context.Teachers.Any())
+        {
+            var teacherNames = new[]
+            {
+                ("Anna Lindström", "anna.lindstrom@miun.se"),
+                ("Erik Johansson", "erik.johansson@miun.se"),
+                ("Maria Petersson", "maria.petersson@miun.se"),
+                ("Lars Nilsson", "lars.nilsson@miun.se"),
+                ("Sofia Bergström", "sofia.bergstrom@miun.se"),
+                ("Johan Eriksson", "johan.eriksson@miun.se"),
+                ("Karin Andersson", "karin.andersson@miun.se"),
+                ("Anders Holm", "anders.holm@miun.se"),
+            };
+
+            foreach (var (name, email) in teacherNames)
+                context.Teachers.Add(new Teacher { Name = name, Email = email });
+
+            await context.SaveChangesAsync();
+        }
+
         //seed kurser från json
         if (!context.Courses.Any())
         {
@@ -76,6 +97,9 @@ public static class DbInitializer
 
                 if (courses != null)
                 {
+                    var teachers = context.Teachers.ToList();
+                    int teacherIndex = 0;
+
                     foreach (var dto in courses)
                     {
                         //skapa kategori om den inte finns
@@ -89,20 +113,15 @@ public static class DbInitializer
                             await context.SaveChangesAsync();
                         }
 
-                        //se till att det finns minst en lärare
-                        var teacher = context.Teachers.FirstOrDefault();
-                        if (teacher == null)
-                        {
-                            teacher = new Teacher { Name = "Ej angiven" };
-                            context.Teachers.Add(teacher);
-                            await context.SaveChangesAsync();
-                        }
-
                         var exists = await context.Courses
      .AnyAsync(c => c.CourseCode == dto.courseCode);
 
                         if (!exists)
                         {
+                            //fördela kurser jämnt bland lärarna
+                            var teacher = teachers[teacherIndex % teachers.Count];
+                            teacherIndex++;
+
                             context.Courses.Add(new Course
                             {
                                 CourseCode = dto.courseCode,
