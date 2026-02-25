@@ -2,6 +2,7 @@ using Courses.Web.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Courses.Web.Controllers;
 
@@ -48,6 +49,25 @@ public class CoursesController : Controller
             .ToListAsync();
 
         return View(courses);
+    }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var course = await _context.Courses
+            .Include(c => c.Category)
+            .Include(c => c.Teacher)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (course == null)
+            return NotFound();
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var isEnrolled = userId != null && await _context.Enrollments
+            .AnyAsync(e => e.CourseId == id && e.UserId == userId);
+
+        ViewBag.IsEnrolled = isEnrolled;
+
+        return View(course);
     }
 
     public async Task<IActionResult> Count()
