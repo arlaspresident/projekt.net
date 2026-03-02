@@ -1,0 +1,76 @@
+@using Courses.Web.Models
+@model List<Enrollment>
+
+@{
+    ViewData["Title"] = "Hantera anmälningar";
+    var users = (Dictionary<string, string>)ViewBag.Users;
+}
+
+<h1>Anmälningar</h1>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <label for="q" class="form-label">Sök student eller kurs</label>
+        <input id="q" name="q" value="@ViewBag.Query" class="form-control" placeholder="E-post eller kursnamn..." />
+    </div>
+    <div class="col-md-3">
+        <label for="courseId" class="form-label">Kurs</label>
+        <select id="courseId" name="courseId" class="form-select" asp-items="(SelectList)ViewBag.Courses">
+            <option value="">Alla kurser</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="categoryId" class="form-label">Kategori</label>
+        <select id="categoryId" name="categoryId" class="form-select" asp-items="(SelectList)ViewBag.Categories">
+            <option value="">Alla kategorier</option>
+        </select>
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100" type="submit">Filtrera</button>
+    </div>
+</form>
+
+<p class="text-muted small">@Model.Count anmälningar</p>
+
+@if (!Model.Any())
+{
+    <p>Inga anmälningar hittades.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Kurs</th>
+                <th>Kategori</th>
+                <th>Anmäld</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td>@users.GetValueOrDefault(e.UserId, e.UserId)</td>
+                    <td>
+                        <a asp-controller="Courses" asp-action="Details" asp-route-id="@e.CourseId">
+                            @e.Course?.Title
+                        </a>
+                    </td>
+                    <td>@e.Course?.Category?.Name</td>
+                    <td>@e.EnrolledAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@e.Id" method="post" style="display:inline;"
+                              onsubmit="return confirm('Ta bort anmälan för @users.GetValueOrDefault(e.UserId, e.UserId)?')">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Ta bort</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-controller="Admin" asp-action="Index">← Tillbaka till adminpanel</a>
