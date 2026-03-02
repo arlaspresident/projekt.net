@@ -21,8 +21,9 @@
         <tr>
             <th>
                 <a asp-action="Index" asp-route-q="@q" asp-route-categoryId="@categoryId"
-                   asp-route-sort="titel" class="text-decoration-none text-dark">
-                    Titel @(sort == "titel" ? "▲" : "")
+                   asp-route-sort="@(sort == "titel" ? "titel_desc" : "titel")"
+                   class="text-decoration-none text-dark">
+                    Titel @(sort == "titel" ? "▲" : sort == "titel_desc" ? "▼" : "")
                 </a>
             </th>
             <th>Kategori</th>

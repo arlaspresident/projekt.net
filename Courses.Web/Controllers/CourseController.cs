@@ -48,9 +48,10 @@ public class CoursesController : Controller
         //sortering
         query = sort switch
         {
-            "hp_asc"  => query.OrderBy(c => c.Credits),
-            "hp_desc" => query.OrderByDescending(c => c.Credits),
-            _         => query.OrderBy(c => c.Title)
+            "hp_asc"     => query.OrderBy(c => c.Credits),
+            "hp_desc"    => query.OrderByDescending(c => c.Credits),
+            "titel_desc" => query.OrderByDescending(c => c.Title),
+            _            => query.OrderBy(c => c.Title)
         };
 
         //paginering
