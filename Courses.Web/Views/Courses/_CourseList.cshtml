@@ -1,0 +1,73 @@
+@model IEnumerable<Courses.Web.Models.Course>
+
+@{
+    int page       = ViewBag.Page;
+    int totalPages = ViewBag.TotalPages;
+    int totalCount = ViewBag.TotalCount;
+    string sort    = ViewBag.Sort;
+    string? q      = ViewBag.Query;
+    int? categoryId = Context.Request.Query.ContainsKey("categoryId")
+        ? int.TryParse(Context.Request.Query["categoryId"], out var cid) ? cid : (int?)null
+        : null;
+}
+
+<p class="text-muted small">
+    Visar @((page - 1) * (int)ViewBag.PageSize + 1)–@((page - 1) * (int)ViewBag.PageSize + Model.Count())
+    av @totalCount kurser
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-q="@q" asp-route-categoryId="@categoryId"
+                   asp-route-sort="titel" class="text-decoration-none text-dark">
+                    Titel @(sort == "titel" ? "▲" : "")
+                </a>
+            </th>
+            <th>Kategori</th>
+            <th>
+                <a asp-action="Index" asp-route-q="@q" asp-route-categoryId="@categoryId"
+                   asp-route-sort="@(sort == "hp_asc" ? "hp_desc" : "hp_asc")"
+                   class="text-decoration-none text-dark">
+                    Hp @(sort == "hp_asc" ? "▲" : sort == "hp_desc" ? "▼" : "")
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td><a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id">@course.Title</a></td>
+                <td>@course.Category?.Name</td>
+                <td>@course.Credits</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (totalPages > 1)
+{
+    <nav aria-label="Sidnavigering">
+        <ul class="pagination">
+            <li class="page-item @(page == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-q="@q" asp-route-categoryId="@categoryId"
+                   asp-route-sort="@sort" asp-route-page="@(page - 1)">Föregående</a>
+            </li>
+
+            @for (int i = Math.Max(1, page - 2); i <= Math.Min(totalPages, page + 2); i++)
+            {
+                <li class="page-item @(i == page ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-q="@q" asp-route-categoryId="@categoryId"
+                       asp-route-sort="@sort" asp-route-page="@i">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(page == totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-q="@q" asp-route-categoryId="@categoryId"
+                   asp-route-sort="@sort" asp-route-page="@(page + 1)">Nästa</a>
+            </li>
+        </ul>
+    </nav>
+}

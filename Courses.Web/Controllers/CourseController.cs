@@ -36,8 +36,8 @@ public class CoursesController : Controller
 
         if (!string.IsNullOrWhiteSpace(q))
         {
-            var term = q.Trim();
-            query = query.Where(c => c.Title.Contains(term));
+            var term = q.Trim().ToLower();
+            query = query.Where(c => c.Title.ToLower().Contains(term));
         }
 
         if (categoryId.HasValue)
@@ -64,6 +64,9 @@ public class CoursesController : Controller
         ViewBag.PageSize = pageSize;
         ViewBag.TotalCount = totalCount;
         ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        if (Request.Headers.XRequestedWith == "XMLHttpRequest")
+            return PartialView("_CourseList", courses);
 
         return View(courses);
     }

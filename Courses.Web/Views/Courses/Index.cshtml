@@ -3,15 +3,18 @@
 
 <h1>Kurser</h1>
 
-<form method="get" class="row g-2 mb-3">
+<form method="get" class="row g-2 mb-3" id="filterForm">
+    <input type="hidden" name="sort" value="@ViewBag.Sort" />
     <div class="col-md-6">
         <label for="q" class="form-label">Sök</label>
-        <input id="q" name="q" value="@ViewBag.Query" class="form-control" placeholder="Sök på kursnamn..." />
+        <input id="q" name="q" value="@ViewBag.Query" class="form-control"
+               placeholder="Sök på kursnamn..." autocomplete="off" />
     </div>
 
     <div class="col-md-4">
         <label for="categoryId" class="form-label">Kategori</label>
-        <select id="categoryId" name="categoryId" class="form-select" asp-items="(SelectList)ViewBag.Categories">
+        <select id="categoryId" name="categoryId" class="form-select"
+                asp-items="(SelectList)ViewBag.Categories">
             <option value="">Alla kategorier</option>
         </select>
     </div>
@@ -21,22 +24,32 @@
     </div>
 </form>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Titel</th>
-            <th>Kategori</th>
-            <th>Hp</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var course in Model)
-        {
-            <tr>
-                <td><a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id">@course.Title</a></td>
-                <td>@course.Category?.Name</td>
-                <td>@course.Credits</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div id="courseResults">
+    <partial name="_CourseList" model="Model" />
+</div>
+
+@section Scripts {
+<script>
+    const input = document.getElementById('q');
+    const category = document.getElementById('categoryId');
+    const results = document.getElementById('courseResults');
+    let debounce;
+
+    async function liveSearch() {
+        const q = input.value;
+        const catId = category.value;
+        const sort = document.querySelector('[name="sort"]').value;
+
+        const url = `/Courses?q=${encodeURIComponent(q)}&categoryId=${catId}&sort=${sort}`;
+        const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+        results.innerHTML = await res.text();
+    }
+
+    input.addEventListener('input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(liveSearch, 300);
+    });
+
+    category.addEventListener('change', liveSearch);
+</script>
+}
