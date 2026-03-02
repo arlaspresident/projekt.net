@@ -16,8 +16,10 @@ public class CoursesController : Controller
     }
 
     //offentlig lista över alla kurser
-    public async Task<IActionResult> Index(string? q, int? categoryId)
+    public async Task<IActionResult> Index(string? q, int? categoryId, int page = 1, string sort = "titel")
     {
+        const int pageSize = 25;
+
         //dropdown
         var categories = await _context.Categories
             .OrderBy(c => c.Name)
@@ -25,6 +27,7 @@ public class CoursesController : Controller
 
         ViewBag.Categories = new SelectList(categories, "Id", "Name", categoryId);
         ViewBag.Query = q;
+        ViewBag.Sort = sort;
 
         //query
         var query = _context.Courses
@@ -42,11 +45,25 @@ public class CoursesController : Controller
             query = query.Where(c => c.CategoryId == categoryId.Value);
         }
 
-        //sortera lite så det känns stabilt
+        //sortering
+        query = sort switch
+        {
+            "hp_asc"  => query.OrderBy(c => c.Credits),
+            "hp_desc" => query.OrderByDescending(c => c.Credits),
+            _         => query.OrderBy(c => c.Title)
+        };
+
+        //paginering
+        var totalCount = await query.CountAsync();
         var courses = await query
-            .OrderBy(c => c.Title)
-            .Take(200) //så den inte renderar 4k rader
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        ViewBag.Page = page;
+        ViewBag.PageSize = pageSize;
+        ViewBag.TotalCount = totalCount;
+        ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
         return View(courses);
     }
