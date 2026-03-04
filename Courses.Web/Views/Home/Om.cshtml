@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "Om tjänsten";
+}
+
+<div class="py-4">
+    <h1>Om kursplattformen</h1>
+    <p class="lead">En samlad plattform för kurser vid Mittuniversitetet.</p>
+
+    <hr />
+
+    <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+            <h4>För studenter</h4>
+            <p>Sök bland tusentals kurser, anmäl dig och håll koll på dina anmälningar på ett ställe.</p>
+            <p class="text-muted">Registrera med en <strong>@@student.courses.se</strong>-adress för att få tillgång.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+            <h4>För personal</h4>
+            <p>Hantera kurser, kategorier och lärare via adminpanelen.</p>
+            <p class="text-muted">Registrera med en <strong>@@courses.se</strong>-adress för att få tillgång.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+            <h4>Publik katalog</h4>
+            <p>Kurskatalogen är öppen för alla. Sök och filtrera utan att logga in.</p>
+            <a asp-controller="Courses" asp-action="Index" class="btn btn-outline-primary">Bläddra kurser</a>
+        </div>
+    </div>
+</div>

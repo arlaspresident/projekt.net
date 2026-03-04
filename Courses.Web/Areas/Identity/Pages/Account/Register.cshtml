@@ -1,0 +1,46 @@
+@page
+@model Courses.Web.Areas.Identity.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Registrera konto";
+}
+
+<h1>Registrera konto</h1>
+
+<div class="row">
+    <div class="col-md-5">
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="text-danger mb-3">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+
+            <div class="mb-3">
+                <label for="Input_Email" class="form-label">E-post</label>
+                <input id="Input_Email" name="Input.Email" type="email" class="form-control" autocomplete="username" value="@Model.Input.Email" />
+                <div class="form-text">
+                    Använd <strong>@@student.courses.se</strong> för studentkonto
+                    eller <strong>@@courses.se</strong> för adminkonto.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="Input_Password" class="form-label">Lösenord</label>
+                <input id="Input_Password" name="Input.Password" type="password" class="form-control" autocomplete="new-password" />
+            </div>
+
+            <div class="mb-3">
+                <label for="Input_ConfirmPassword" class="form-label">Bekräfta lösenord</label>
+                <input id="Input_ConfirmPassword" name="Input.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Registrera</button>
+        </form>
+    </div>
+</div>
