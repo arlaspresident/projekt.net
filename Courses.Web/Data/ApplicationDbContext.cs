@@ -12,6 +12,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Category> Categories { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Enrollment> Enrollments { get; set; }
+    public DbSet<DocumentRequest> DocumentRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
