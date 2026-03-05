@@ -1,0 +1,43 @@
+@{
+    ViewData["Title"] = "Ny dokumentförfrågan";
+}
+
+<h1>Ny dokumentförfrågan</h1>
+
+<div class="row">
+    <div class="col-md-5">
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="text-danger mb-3">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+
+            <div class="mb-3">
+                <label for="studentUserId" class="form-label">Student</label>
+                <select id="studentUserId" name="studentUserId" class="form-select">
+                    <option value="">– Välj student –</option>
+                    @foreach (var item in (IEnumerable<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)ViewBag.Students)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="message" class="form-label">Meddelande</label>
+                <textarea id="message" name="message" class="form-control" rows="4"
+                          placeholder="Beskriv vilket dokument som efterfrågas..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Skicka förfrågan</button>
+            <a asp-action="Index" class="btn btn-outline-secondary ms-2">Avbryt</a>
+        </form>
+    </div>
+</div>

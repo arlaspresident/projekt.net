@@ -1,0 +1,68 @@
+@model IEnumerable<Courses.Web.Models.DocumentRequest>
+@{
+    ViewData["Title"] = "Dokumentförfrågningar";
+    var users = ViewBag.Users as Dictionary<string, string> ?? new Dictionary<string, string>();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Dokumentförfrågningar</h1>
+    <a asp-action="Create" class="btn btn-primary">Ny förfrågan</a>
+</div>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Inga förfrågningar ännu.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Meddelande</th>
+                <th>Skickad</th>
+                <th>Status</th>
+                <th>Fil</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@(users.TryGetValue(r.StudentUserId, out var email) ? email : r.StudentUserId)</td>
+                    <td>@r.Message</td>
+                    <td>@r.RequestedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        @if (r.IsFulfilled)
+                        {
+                            <span class="badge bg-success">Uppfylld</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Väntar</span>
+                        }
+                    </td>
+                    <td>
+                        @if (r.FilePath != null && r.FileName != null)
+                        {
+                            var relativePath = "/uploads/documents/" + System.IO.Path.GetFileName(r.FilePath);
+                            <a href="@relativePath" target="_blank">@r.FileName</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">–</span>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@r.Id" method="post"
+                              onsubmit="return confirm('Ta bort förfrågan?')">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Ta bort</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
