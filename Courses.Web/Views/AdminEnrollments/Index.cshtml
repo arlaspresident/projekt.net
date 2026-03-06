@@ -45,6 +45,7 @@ else
                 <th>Kurs</th>
                 <th>Kategori</th>
                 <th>Anmäld</th>
+                <th>Status</th>
                 <th></th>
             </tr>
         </thead>
@@ -61,8 +62,25 @@ else
                     <td>@e.Course?.Category?.Name</td>
                     <td>@e.EnrolledAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
                     <td>
-                        <form asp-action="Delete" asp-route-id="@e.Id" method="post" style="display:inline;"
-                              onsubmit="return confirm('Ta bort anmälan för @users.GetValueOrDefault(e.UserId, e.UserId)?')">
+                        @if (e.IsApproved)
+                        {
+                            <span class="badge bg-success">Godkänd</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Väntar</span>
+                        }
+                    </td>
+                    <td class="d-flex gap-2">
+                        @if (!e.IsApproved)
+                        {
+                            <form asp-action="Approve" asp-route-id="@e.Id" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-success">Godkänn</button>
+                            </form>
+                        }
+                        <form asp-action="Delete" asp-route-id="@e.Id" method="post"
+                              onsubmit="return confirm('Ta bort anmälan?')">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-sm btn-outline-danger">Ta bort</button>
                         </form>

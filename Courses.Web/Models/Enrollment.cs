@@ -8,6 +8,8 @@ public class Enrollment
 
     public DateTime EnrolledAt { get; set; } = DateTime.UtcNow;
 
+    public bool IsApproved { get; set; } = false;
+
     //FK till identity anv
     [Required]
     public string UserId { get; set; } = string.Empty;

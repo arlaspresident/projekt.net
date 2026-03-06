@@ -67,6 +67,19 @@ public class AdminEnrollmentsController : Controller
     }
 
     [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Approve(int id)
+    {
+        var enrollment = await _db.Enrollments.FindAsync(id);
+        if (enrollment != null)
+        {
+            enrollment.IsApproved = true;
+            await _db.SaveChangesAsync();
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
     {
         var enrollment = await _db.Enrollments.FindAsync(id);

@@ -1,4 +1,4 @@
-@model List<Courses.Web.Models.Course>
+@model List<Courses.Web.Models.Enrollment>
 
 <h1>Mina kurser</h1>
 
@@ -8,17 +8,24 @@
 }
 else
 {
-    <ul>
-    @foreach (var c in Model)
+    <ul class="list-unstyled">
+    @foreach (var e in Model)
     {
-        <li>
-            <strong>@c.CourseCode</strong> – @c.Title
-            <a asp-controller="Courses" asp-action="Details" asp-route-id="@c.Id">Detaljer</a>
-
+        <li class="mb-2 d-flex align-items-center gap-3">
+            <span><strong>@e.Course?.CourseCode</strong> – @e.Course?.Title</span>
+            @if (e.IsApproved)
+            {
+                <span class="badge bg-success">Godkänd</span>
+            }
+            else
+            {
+                <span class="badge bg-warning text-dark">Väntar på godkännande</span>
+            }
+            <a asp-controller="Courses" asp-action="Details" asp-route-id="@e.CourseId">Detaljer</a>
             <form asp-controller="Enrollments" asp-action="Delete" method="post" style="display:inline;">
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="courseId" value="@c.Id" />
-                <button type="submit">Avanmäl</button>
+                <input type="hidden" name="courseId" value="@e.CourseId" />
+                <button type="submit" class="btn btn-sm btn-outline-danger">Avanmäl</button>
             </form>
         </li>
     }

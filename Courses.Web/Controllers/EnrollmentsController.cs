@@ -77,13 +77,12 @@ public class EnrollmentsController : Controller
         if (string.IsNullOrWhiteSpace(userId))
             return Challenge();
 
-        var courses = await _db.Enrollments
+        var enrollments = await _db.Enrollments
             .Where(e => e.UserId == userId)
             .Include(e => e.Course)
             .OrderByDescending(e => e.EnrolledAt)
-            .Select(e => e.Course!)
             .ToListAsync();
 
-        return View(courses);
+        return View(enrollments);
     }
 }
