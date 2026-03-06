@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="sv">
+<html lang="sv" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,7 +21,7 @@
                 <div id="navbarContent" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Startsidan</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Kurser</a>
@@ -48,6 +48,7 @@
                             </li>
                         }
                     </ul>
+                    <button id="themeToggle" class="btn btn-sm btn-outline-secondary me-2" aria-label="Växla tema">🌙</button>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
@@ -68,5 +69,19 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        (function () {
+            var saved = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', saved);
+            document.getElementById('themeToggle').textContent = saved === 'dark' ? '☀️' : '🌙';
+        })();
+        document.getElementById('themeToggle').addEventListener('click', function () {
+            var current = document.documentElement.getAttribute('data-bs-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', next);
+            localStorage.setItem('theme', next);
+            this.textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+    </script>
 </body>
 </html>

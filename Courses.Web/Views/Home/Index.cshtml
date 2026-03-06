@@ -2,8 +2,35 @@
     ViewData["Title"] = "Välkommen";
 }
 
-<div class="text-center py-5">
-    <h1 class="display-4">Kursplattform</h1>
-    <p class="lead">Hitta och anmäl dig till kurser från Mittuniversitetet.</p>
-    <a asp-controller="Courses" asp-action="Index" class="btn btn-primary btn-lg mt-3">Bläddra bland kurser</a>
+<div class="text-center py-5 mb-4">
+    <h1 class="display-4 fw-bold">Kursplattform</h1>
+    <p class="lead text-muted">Hitta och anmäl dig till kurser från Mittuniversitetet.</p>
+    <a asp-controller="Courses" asp-action="Index" class="btn btn-primary btn-lg mt-3 px-4">Bläddra bland kurser</a>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h5 card-title">Tusentals kurser</h2>
+                <p class="card-text text-muted">Sök och filtrera bland kurser från Mittuniversitetet inom alla ämnesområden.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h5 card-title">Enkel anmälan</h2>
+                <p class="card-text text-muted">Registrera dig med din studentadress och anmäl dig till kurser med ett klick.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h5 card-title">Hantera dokument</h2>
+                <p class="card-text text-muted">Ta emot och ladda upp dokument direkt i plattformen när administratören begär det.</p>
+            </div>
+        </div>
+    </div>
 </div>
