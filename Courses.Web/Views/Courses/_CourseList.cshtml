@@ -19,19 +19,21 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 <a asp-action="Index" asp-route-q="@q" asp-route-categoryId="@categoryId"
                    asp-route-sort="@(sort == "titel" ? "titel_desc" : "titel")"
-                   class="text-decoration-none text-dark">
-                    Titel @(sort == "titel" ? "▲" : sort == "titel_desc" ? "▼" : "")
+                   class="text-decoration-none text-dark"
+                   aria-label="@(sort == "titel" ? "Sortera titel fallande" : sort == "titel_desc" ? "Sortera titel stigande" : "Sortera efter titel")">
+                    Titel <span aria-hidden="true">@(sort == "titel" ? "▲" : sort == "titel_desc" ? "▼" : "")</span>
                 </a>
             </th>
-            <th>Kategori</th>
-            <th>
+            <th scope="col">Kategori</th>
+            <th scope="col">
                 <a asp-action="Index" asp-route-q="@q" asp-route-categoryId="@categoryId"
                    asp-route-sort="@(sort == "hp_asc" ? "hp_desc" : "hp_asc")"
-                   class="text-decoration-none text-dark">
-                    Hp @(sort == "hp_asc" ? "▲" : sort == "hp_desc" ? "▼" : "")
+                   class="text-decoration-none text-dark"
+                   aria-label="@(sort == "hp_asc" ? "Sortera hp fallande" : sort == "hp_desc" ? "Sortera hp stigande" : "Sortera efter hp")">
+                    Hp <span aria-hidden="true">@(sort == "hp_asc" ? "▲" : sort == "hp_desc" ? "▼" : "")</span>
                 </a>
             </th>
         </tr>
