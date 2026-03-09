@@ -5,11 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-Courses.Web-afc00d72-999f-4995-a78e-3e6700cb2d52</UserSecretsId>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
 
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
-    <EmbeddedResource Remove="**/*.resx" />
   </ItemGroup>
 
   <ItemGroup>
