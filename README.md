@@ -20,7 +20,7 @@ cd courses
 dotnet run --project Courses.Web
 ```
 
-Öppna `https://localhost:5001` i webbläsaren.
+Öppna `http://localhost:5098` i webbläsaren.
 
 Databasen skapas automatiskt vid första start och fylls med exempeldata (kurser från Mittuniversitetet).
 
